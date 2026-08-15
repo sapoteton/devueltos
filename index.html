@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+
+  <title>Calculadora de Vuelto</title>
+
+  <style>
+
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      padding-top: 40px;
+      margin: 0;
+    }
+
+    #box {
+      background-color: white;
+      width: 400px;
+      max-width: 90%;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    input {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      margin-bottom: 15px;
+      font-size: 18px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    button {
+      padding: 10px 18px;
+      font-size: 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-right: 5px;
+    }
+
+    #calcular {
+      background-color: #198754;
+      color: white;
+    }
+
+    #limpiar {
+      background-color: #dc3545;
+      color: white;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    th {
+      background-color: #198754;
+      color: white;
+      padding: 10px;
+    }
+
+    td {
+      padding: 10px;
+      text-align: center;
+      border-bottom: 1px solid #ddd;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f5f5f5;
+    }
+
+    .error {
+      color: red;
+      margin-top: 15px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .vuelto {
+      color: #198754;
+      font-weight: bold;
+    }
+
+    .no-alcanza {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <div id="box">
+
+    <h2>Calculadora de Vuelto</h2>
+
+    <input
+      type="number"
+      id="gastado"
+      placeholder="Total gastado"
+      min="0"
+    >
+
+    <button id="calcular" onclick="calcularVuelto()">
+      Calcular
+    </button>
+
+    <button id="limpiar" onclick="limpiar()">
+      Limpiar
+    </button>
+
+    <div id="resultado"></div>
+
+    <div id="error"></div>
+
+  </div>
+
+
+  <script>
+
+    function calcularVuelto() {
+
+      let gastado =
+        Number(document.getElementById("gastado").value);
+
+      let resultado =
+        document.getElementById("resultado");
+
+      let error =
+        document.getElementById("error");
+
+      resultado.innerHTML = "";
+      error.innerHTML = "";
+
+      if (gastado <= 0 || isNaN(gastado)) {
+
+        error.innerHTML =
+          "Ingresa un valor válido.";
+
+        return;
+      }
+
+
+      let billetes = [
+        2000,
+        5000,
+        10000,
+        20000,
+        50000,
+        100000
+      ];
+
+
+      let tabla = `
+        <table>
+
+          <tr>
+            <th>Billete</th>
+            <th>Vuelto</th>
+          </tr>
+      `;
+
+
+      for (let i = 0; i < billetes.length; i++) {
+
+        let billete = billetes[i];
+
+        let vuelto = billete - gastado;
+
+
+        if (vuelto < 0) {
+
+          tabla += `
+            <tr>
+
+              <td>
+                $${billete.toLocaleString("es-CO")}
+              </td>
+
+              <td class="no-alcanza">
+                No alcanza
+              </td>
+
+            </tr>
+          `;
+
+        }
+
+        else {
+
+          tabla += `
+            <tr>
+
+              <td>
+                $${billete.toLocaleString("es-CO")}
+              </td>
+
+              <td class="vuelto">
+                $${vuelto.toLocaleString("es-CO")}
+              </td>
+
+            </tr>
+          `;
+
+        }
+
+      }
+
+
+      tabla += `</table>`;
+
+      resultado.innerHTML = tabla;
+
+    }
+
+
+    function limpiar() {
+
+      document.getElementById("gastado").value = "";
+
+      document.getElementById("resultado").innerHTML = "";
+
+      document.getElementById("error").innerHTML = "";
+
+    }
+
+  </script>
+
+</body>
+</html>
